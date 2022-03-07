@@ -20,6 +20,28 @@ class MainActivity : AppCompatActivity() {
         calculationsTV.text = ""
     }
 
+    fun backSpaceAction(view: View) {
+        val length = calculationsTV.length()
+        if (length > 0)
+            calculationsTV.text = calculationsTV.text.subSequence(0, length-1)
+    }
+
+    fun numberAction(view: View) {
+        if (view is Button)
+        {
+            calculationsTV.append(view.text)
+            canAddOperation = true
+        }
+    }
+
+    fun operationAction(view: View) {
+        if (view is Button && canAddOperation)
+        {
+            calculationsTV.append(view.text)
+            canAddOperation = false
+        }
+    }
+
     private fun calculateResults(): String {
         val digitsOperators = digitsOperators()
         if(digitsOperators.isEmpty()) return ""
@@ -33,6 +55,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun timesDivisionCalculate(passedList: MutableList<Any>): MutableList<Any> {
+        var list = passedList
+        while (list.contains('x') || list.contains('/'))
+            list = calcTimesDiv(list)
+        return list
+    }
+
+
+    private fun calcTimesDiv(passedList: MutableList<Any>): MutableList<Any> {
         val newList = mutableListOf<Any>()
         var restartIndex = passedList.size
 
@@ -69,12 +99,13 @@ class MainActivity : AppCompatActivity() {
                 val operator = passedList[i]
                 val nextDigit = passedList[i+1] as Float
 
-                if (operator == '+')
-                    result += nextDigit
-                if (operator == '-')
-                    result -= nextDigit
+                if (operator == '+'){
+                    result += nextDigit}
+                if (operator == '-'){
+                    result -= nextDigit}
             }
         }
+
         return result
     }
 
@@ -82,7 +113,7 @@ class MainActivity : AppCompatActivity() {
         val list = mutableListOf<Any>()
         var currentDigit = ""
         for (character in calculationsTV.text) {
-            if (character.isDigit() || character == ',')
+            if (character.isDigit())
                 currentDigit += character
             else {
                 list.add(currentDigit.toFloat())
@@ -94,28 +125,6 @@ class MainActivity : AppCompatActivity() {
             list.add(currentDigit.toFloat())
 
         return list
-    }
-
-    fun backSpaceAction(view: View) {
-        val length = calculationsTV.length()
-        if (length > 0)
-            calculationsTV.text = calculationsTV.text.subSequence(0, length-1)
-    }
-
-    fun numberAction(view: View) {
-        if (view is Button)
-        {
-            calculationsTV.append(view.text)
-            canAddOperation = true
-        }
-    }
-
-    fun operationAction(view: View) {
-        if (view is Button && canAddOperation)
-        {
-            calculationsTV.append(view.text)
-            canAddOperation = false
-        }
     }
 
 }

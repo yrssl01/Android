@@ -337,7 +337,7 @@
                 android:paddingLeft="4dp"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/blue"
-                android:text=""/>
+                android:text="<-"/>
 
 
         </LinearLayout>
